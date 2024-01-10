@@ -1,0 +1,31 @@
+{
+  "name": "ycit-ui",
+  "version": "1.2.4",
+  "keywords": [
+    "echarts",
+    "chart",
+    "ui",
+    "cupshe"
+  ],
+  "main": "./dist/cjs/index.cjs.js",
+  "module": "./dist/es/index.esm.js",
+  "unpkg": "./dist/umd/ycit-ui.umd.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "echarts": "^5.4.3",
+    "vue": "^3.3.4",
+    "ycit-ui": "^1.2.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "vite": "^4.4.5"
+  }
+}
