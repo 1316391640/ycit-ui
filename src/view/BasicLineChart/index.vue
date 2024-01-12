@@ -10,7 +10,7 @@
 
 <script setup>
 import * as echarts from 'echarts';
-import { onMounted, reactive, ref, watch, } from 'vue';
+import { onMounted, reactive, ref, watch, computed, onUnmounted } from 'vue';
 import maskLayer from '../maskLayer/index.vue';
 import ChartUtils from '../../utils/chartUtils'
 const props = defineProps({
@@ -21,6 +21,14 @@ const props = defineProps({
   baseUrl: {
     type: String,
     default: () => '!!!'
+  },
+  title: {
+    type: String,
+    default: () => ''
+  },
+  refresh: {
+    type: Number,
+    default: () => 10
   }
 })
 const divRef = ref()
@@ -47,6 +55,8 @@ const state = reactive({
   },//默认的配置项
   finallyOption: null,//最终配置项
   myChart: null,
+  time: computed(() => props.refresh * 60 * 1000),
+  intervalId: null,
   getData: async () => {
     try {
       const info = await fetch(props.baseUrl, {
@@ -71,6 +81,7 @@ const state = reactive({
           const info = await state.getData()
           mixtureOption.series[0].data = info.data
         }
+        mixtureOption.title.text = props.title
         state.myChart.setOption(mixtureOption)
       } catch (error) {
         state.title = error
@@ -88,6 +99,14 @@ onMounted(() => {
   state.myChart = echarts.init(divRef.value);
   // 绘制图表
   state.renderChart()
+  if (props.baseUrl !== '!!!') {
+    state.intervalId = setInterval(() => {
+      state.renderChart()
+    }, state.time)
+  }
+})
+onUnmounted(() => {
+  clearInterval(state.intervalId)
 })
 </script>
 

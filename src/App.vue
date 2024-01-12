@@ -6,12 +6,18 @@
           value1: 'value',
           label: 'name'
         }"
-        title="123"
+        title="1111"
+        baseUrl="http://127.0.0.1:7001/api/mockData"
         :refresh="0.1"></DoughnutChart>
     </div>
     <button @click="state.option = option1">点击我</button>
-    <BasicBar :option="state.option"></BasicBar>
-    <BasicLineChart></BasicLineChart>
+    <BasicBar :option="state.option"
+      title="1111"
+      baseUrl="http://127.0.0.1:7001/api/mockData"
+      :refresh="0.1"></BasicBar>
+    <BasicLineChart title="1111"
+      baseUrl="http://127.0.0.1:7001/api/mockData"
+      :refresh="0.1"></BasicLineChart>
   </div>
 </template>
 
