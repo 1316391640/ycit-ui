@@ -10,13 +10,13 @@
 
 <script setup>
 import * as echarts from 'echarts';
-import { computed, onErrorCaptured, onMounted, onUnmounted, reactive, ref, watch, } from 'vue';
+import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 import maskLayer from '../maskLayer/index.vue';
 import ChartUtils from '../../utils/chartUtils'
 const props = defineProps({
   option: {
-    type: String,
-    default: () => '{}'
+    type: Object,
+    default: () => ({})
   },
   baseUrl: {
     type: String,
@@ -26,10 +26,6 @@ const props = defineProps({
     type: Object,
     default: () => ({})
   },
-  title: {
-    type: String,
-    default: () => ''
-  },
   refresh: {
     type: Number,
     default: () => 10
@@ -38,49 +34,6 @@ const props = defineProps({
 const divRef = ref()
 const state = reactive({
   isShowMask: false,//控制遮罩是否显示
-  title: '',//遮罩内部的文案
-  defaultOption: {
-    title: {
-      text: '饼图'
-    },
-    tooltip: {
-      trigger: 'item'
-    },
-    legend: {
-      top: '5%',
-      left: 'center'
-    },
-    series: [
-      {
-        name: 'Access From',
-        type: 'pie',
-        radius: ['40%', '70%'],
-        avoidLabelOverlap: false,
-        label: {
-          show: false,
-          position: 'center'
-        },
-        emphasis: {
-          label: {
-            show: true,
-            fontSize: 40,
-            fontWeight: 'bold'
-          }
-        },
-        labelLine: {
-          show: false
-        },
-        data: [
-          { value: 1048, name: 'Search Engine' },
-          { value: 735, name: 'Direct' },
-          { value: 580, name: 'Email' },
-          { value: 484, name: 'Union Ads' },
-          { value: 300, name: 'Video Ads' }
-        ]
-      }
-    ]
-  },//默认的配置项
-  finallyOption: null,//最终配置项
   myChart: null,
   time: computed(() => props.refresh * 60 * 1000),
   intervalId: null,
@@ -98,18 +51,13 @@ const state = reactive({
     if (state.myChart) {
       try {
         state.isShowMask = false
-        const editJsonParse = ChartUtils.formattingJson(props.option)
-        const mixtureOption = {
-          ...state.defaultOption,
-          ...editJsonParse
-        }
+        const mixtureOption = JSON.parse(JSON.stringify(props.option))
         if (props.baseUrl !== '!!!') {
           ChartUtils.judgeUrl(props.baseUrl)
           const info = await state.getData()
           const data = ChartUtils.mapPortData(props.portMap, info.data)
           mixtureOption.series[0].data = data
         }
-        mixtureOption.title.text = props.title
         state.myChart.setOption(mixtureOption)
       } catch (error) {
         state.title = error

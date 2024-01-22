@@ -15,16 +15,12 @@ import maskLayer from '../maskLayer/index.vue';
 import ChartUtils from '../../utils/chartUtils'
 const props = defineProps({
   option: {
-    type: String,
-    default: () => '{}'
+    type: Object,
+    default: () => ({})
   },
   baseUrl: {
     type: String,
     default: () => '!!!'
-  },
-  title: {
-    type: String,
-    default: () => ''
   },
   refresh: {
     type: Number,
@@ -34,25 +30,6 @@ const props = defineProps({
 const divRef = ref()
 const state = reactive({
   isShowMask: false,//控制遮罩是否显示
-  title: '',//遮罩内部的文案
-  defaultOption: {
-    title: {
-      text: '柱形图'
-    },
-    tooltip: {},
-    xAxis: {
-      data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
-    },
-    yAxis: {},
-    series: [
-      {
-        name: '销量',
-        type: 'bar',
-        data: [5, 20, 36, 10, 10, 20]
-      }
-    ]
-  },//默认的配置项
-  finallyOption: null,//最终配置项
   myChart: null,
   time: computed(() => props.refresh * 60 * 1000),
   intervalId: null,
@@ -70,17 +47,12 @@ const state = reactive({
     if (state.myChart) {
       try {
         state.isShowMask = false
-        const editJsonParse = ChartUtils.formattingJson(props.option)
-        const mixtureOption = {
-          ...state.defaultOption,
-          ...editJsonParse
-        }
+        const mixtureOption = JSON.parse(JSON.stringify(props.option))
         if (props.baseUrl !== '!!!') {
           ChartUtils.judgeUrl(props.baseUrl)
           const info = await state.getData()
           mixtureOption.series[0].data = info.data
         }
-        mixtureOption.title.text = props.title
         state.myChart.setOption(mixtureOption)
       } catch (error) {
         state.title = error
