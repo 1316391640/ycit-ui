@@ -27,6 +27,17 @@ app.use(ycit)
 | title       | 图表的标题名称                  | String        |               |
 | refresh     | 数据地址的请求间隔(分钟)         | Number        |  1            |
 
+# 通用组件
+
+| 昵称 | 使用名称 |
+|-------------|------------------------------|
+| 基础柱状图      | BasicBar         | 
+| 基础折线图     | BasicLineChart                |
+| 环形图     | DoughnutChart  |
+| 多组饼图       | DefaultArrangement                  |
+| 折线图堆叠     |  StackedLineChart       |
+| 动态排序柱状图     | BarRace        |
+| 数据集     | ExampleDataset        |
 
 
 
